@@ -37,9 +37,11 @@ int main(void)
     struct sockaddr_in si_me, si_other;
     struct udp_data data_udp[254];
     int s, i, slen = sizeof(si_other) , recv_len;
-    int i_crete, state, temperature, to_plus1, to_minus1, i_plus1, from_plus1, i_minus1, from_minus1;
+    //int i_crete, state, temperature, to_plus1, to_minus1, i_plus1, from_plus1, i_minus1, from_minus1;
     char buf[BUFLEN];
-    char ip_addr[8];
+    char ip_addr_c[3];
+    int ip_addr1, ip_addr2, ip_addr3;
+    int ip_addr;
 
      
     //create a UDP socket
@@ -73,45 +75,34 @@ int main(void)
             die("recvfrom()");
         }
          
-        *ip_addr = (char) inet_ntoa(si_other.sin_addr);
-        printf("%s\n", ip_addr);
-	
-        //print details of the client/peer and the data received
-    	i_crete = 0;      
-    	state = 0;      
-    	temperature = 0;      
-    	to_plus1 = 0;      
-    	to_minus1 = 0;      
-    	i_plus1 = 0;      
-    	from_plus1 = 0;      
-    	i_minus1 = 0;      
-    	from_minus1 = 0;      
+        ip_addr_c[0] = (char) inet_ntoa(si_other.sin_addr)[10];
+        ip_addr_c[1] = (char) inet_ntoa(si_other.sin_addr)[11];
+        ip_addr_c[2] = (char) inet_ntoa(si_other.sin_addr)[12];
+        ip_addr1 = ip_addr_c[0] - '0';
+        ip_addr2 = ip_addr_c[1] - '0';
+        ip_addr3 = ip_addr_c[2] - '0';
+        ip_addr = ip_addr1*100 + ip_addr2*10 + ip_addr3;
+        printf("%d\n", ip_addr);
 
-    	if(recv_len > 0)
-        {
-            printf("Received packet from %s:%d\n", inet_ntoa(si_other.sin_addr), ntohs(si_other.sin_port));
+        data_udp[ip_addr].i_crete     = (((data_udp[ip_addr].i_crete && 0) | buf[1]) << 8) | buf[0];
+        data_udp[ip_addr].state       = (((data_udp[ip_addr].state && 0) | buf[3]) << 8) | buf[2];
+        data_udp[ip_addr].temperature = (((data_udp[ip_addr].temperature && 0) | buf[5]) << 8) | buf[4];
+        data_udp[ip_addr].to_plus1    = (((data_udp[ip_addr].to_plus1 && 0) | buf[7]) << 8) | buf[6];
+        data_udp[ip_addr].to_minus1   = (((data_udp[ip_addr].to_minus1 && 0) | buf[9]) << 8) | buf[8];
+        data_udp[ip_addr].i_plus1     = (((data_udp[ip_addr].i_plus1 && 0) | buf[11]) << 8) | buf[10];
+        data_udp[ip_addr].from_plus1  = (((data_udp[ip_addr].from_plus1 && 0) | buf[13]) << 8) | buf[12];
+        data_udp[ip_addr].i_minus1    = (((data_udp[ip_addr].i_minus1 && 0) | buf[15]) << 8) | buf[14];
+        data_udp[ip_addr].from_minus1 = (((data_udp[ip_addr].from_minus1 && 0) | buf[17]) << 8) | buf[16];
 
-    	    i_crete 	= ((i_crete | buf[1]) << 8) | buf[0];
-    	    state 	= ((state | buf[3]) << 8) | buf[2];
-    	    temperature = ((temperature | buf[5]) << 8) | buf[4];
-    	    to_plus1 	= ((to_plus1 | buf[7]) << 8) | buf[6];
-    	    to_minus1 	= ((to_minus1 | buf[9]) << 8) | buf[8];
-    	    i_plus1 	= ((i_plus1 | buf[11]) << 8) | buf[10];
-    	    from_plus1 	= ((from_plus1 | buf[13]) << 8) | buf[12];
-    	    i_minus1 	= ((i_minus1 | buf[15]) << 8) | buf[14];
-    	    from_minus1 = ((from_minus1 | buf[17]) << 8) | buf[16];
-
-    	    printf("I_crete: %d\n" , i_crete);
-            printf("state: %d\n" , state);
-            printf("temperature: %d\n" ,temperature);
-            printf("to_plus1: %d\n" ,to_plus1 );
-            printf("to_minus1: %d\n" , to_minus1);
-            printf("i_plus1: %d\n" , i_plus1);
-            printf("from_plus1: %d\n" ,from_plus1);
-            printf("i_minus1: %d\n" , i_minus1);
-            printf("from_minus1: %d\n" , from_minus1);
-
-        }
+        printf("I_crete: %d\n" ,    data_udp[ip_addr].i_crete);
+        printf("state: %d\n" ,      data_udp[ip_addr].state);
+        printf("temperature: %d\n" ,data_udp[ip_addr].temperature);
+        printf("to_plus1: %d\n" ,   data_udp[ip_addr].to_plus1 );
+        printf("to_minus1: %d\n" ,  data_udp[ip_addr].to_minus1);
+        printf("i_plus1: %d\n" ,    data_udp[ip_addr].i_plus1);
+        printf("from_plus1: %d\n" , data_udp[ip_addr].from_plus1);
+        printf("i_minus1: %d\n" ,   data_udp[ip_addr].i_minus1);
+        printf("from_minus1: %d\n", data_udp[ip_addr].from_minus1);        
 
         /* 
         //now reply the client with the same data
