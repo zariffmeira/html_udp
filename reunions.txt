@@ -1,0 +1,34 @@
+﻿Reunion 07.11
+- Répondre des questions du projet (doutes)
+- Création du document avec les messages à transmettre via UDP
+- Demonstration de la carte DSP
+- Livraison de la carte DSP
+- Présentation du logiciel basique pour la com UDP en language C
+- Prochain rendez-vous 14.11.2017 sur skype.
+
+
+Reunion 14.11
+
+
+
+
+
+Reunion 22.11
+- Skype
+- Répondre des questions du projet (doutes)
+- Format des donnés de reception
+- Limit final du projet - Fin Janvier 2018
+- Planning du project a envoyer
+- Camera pas choisi encore
+
+
+Reunion 01.12
+- Skype
+- Solutions de camera - a envoyer un document la semaine prochaineINEGEARS Ghost-Eye
+- Decision d'utiliser Electron Framework - JavaScript, HTML et CSS
+- Prochaine Reunion Jeudi 07.12.17 - 14:00
+- Demande: Mis a jour le planning pour envoyer la semaine prochaine
+
+
+Reunion 07.12
+
